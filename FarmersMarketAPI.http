@@ -1,0 +1,6 @@
+@FarmersMarketAPI_HostAddress = http://localhost:5258
+
+GET {{FarmersMarketAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
