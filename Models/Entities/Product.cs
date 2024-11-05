@@ -1,4 +1,6 @@
-namespace FarmersMarketAPI.Models
+using System.Text.Json.Serialization;
+
+namespace FarmersMarketAPI.Models.Entities
 {
     public class Product
     {
@@ -9,8 +11,9 @@ namespace FarmersMarketAPI.Models
         public decimal Price { get; set; }
         public required string ProductDescript { get; set; }
 
-        // Navigation properties
-        public required Category Category { get; set; }
-        public required Farm Farm { get; set; }
+        [JsonIgnore] public Farm Farm { get; set; }
+        [JsonIgnore] public Category Category { get; set; }
+        [JsonIgnore] public List<Offer> Offers{ get; set; }
+
     }
 }
