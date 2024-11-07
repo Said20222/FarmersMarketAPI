@@ -16,6 +16,7 @@ namespace FarmersMarketAPI.Models.Auth
         public DeliveryMethod? PreferredDeliveryMethod { get; set; }
         [JsonIgnore] public List<Farm> Farms { get; set; }
         [JsonIgnore] public List<MarketOrder> Orders { get; set; }
-        [JsonIgnore] public List<Offer> Offers { get; set; }
+        [JsonIgnore] public List<Offer> CreatedOffers { get; set; }
+        [JsonIgnore] public List<Offer> ReceivedOffers { get; set; }
     }
 }

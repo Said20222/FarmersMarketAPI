@@ -2,33 +2,85 @@ using Microsoft.EntityFrameworkCore;
 using FarmersMarketAPI.Models.Entities;
 using FarmersMarketAPI.Models.Auth;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace FarmersMarketAPI.Data
 {
-    public class FarmersMarketContext : DbContext
+    public class FarmersMarketContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
     {
         public FarmersMarketContext(DbContextOptions<FarmersMarketContext> options) : base(options)
         {
         }
 
         /// TODO: add DbSet properties for each entity
-        public DbSet<User> Users { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<Farm> Farms { get; set; }
+        public DbSet<MarketOrder> MarketOrders { get; set; }
+        public DbSet<Offer> Offers { get; set; }
         
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<Farm>().HasOne(f => f.Farmer).WithMany(f => f.Farms).HasForeignKey(f => f.FarmerId);
-            modelBuilder.Entity<Product>().HasOne(p => p.Farm).WithMany(f => f.Products).HasForeignKey(p => p.FarmId);
-            modelBuilder.Entity<Product>().HasOne(p => p.Category).WithMany(c => c.Products).HasForeignKey(p => p.CategoryId);
-            modelBuilder.Entity<Offer>().HasOne(o => o.CreatedBy).WithMany(u => u.Offers).HasForeignKey(o => o.CreatedById);
-            modelBuilder.Entity<Offer>().HasOne(o => o.OfferedTo).WithMany(u => u.Offers).HasForeignKey(o => o.OfferedToId);
-            modelBuilder.Entity<Offer>().HasOne(o => o.Product).WithMany(p => p.Offers).HasForeignKey(o => o.ProductId);
-            modelBuilder.Entity<Offer>().HasOne(o => o.Order).WithMany(o => o.Offers).HasForeignKey(o => o.OrderId);
+            ConfigureProducts(modelBuilder);
+            ConfigureFarms(modelBuilder);
+            ConfigureOffers(modelBuilder);
+            ConfigureOrders(modelBuilder);
+
+            PopulateDb(modelBuilder);
+        }
+
+        public void ConfigureFarms(ModelBuilder builder) 
+        {
+            builder.Entity<Farm>()
+                .Property(f => f.FarmSize)
+                .HasConversion<string>();
+
+            builder.Entity<Farm>().HasOne(f => f.Farmer).WithMany(f => f.Farms).HasForeignKey(f => f.FarmerId);
+        }
+
+        public void ConfigureOrders(ModelBuilder builder) 
+        {
+
+            builder.Entity<MarketOrder>()
+            .HasKey(f => f.OrderId);
+
+            builder.Entity<MarketOrder>()
+            .Property(mo => mo.DeliveryMethod)
+            .HasConversion<string>();
+
+            builder.Entity<MarketOrder>()
+            .Property(mo => mo.PaymentMethod)
+            .HasConversion<string>();
+        }
+
+        public void ConfigureOffers(ModelBuilder builder) 
+        {
+            builder.Entity<Offer>()
+                .Property(o => o.OfferPrice)
+                .HasColumnType("decimal(19, 2)");
+
+
+            builder.Entity<Offer>()
+                .Property(o => o.OfferStatus)
+                .HasConversion<string>();
+
+            builder.Entity<Offer>().HasOne(o => o.CreatedBy).WithMany(u => u.CreatedOffers).HasForeignKey(o => o.CreatedById).OnDelete(DeleteBehavior.Restrict);
+            builder.Entity<Offer>().HasOne(o => o.OfferedTo).WithMany(u => u.ReceivedOffers).HasForeignKey(o => o.OfferedToId).OnDelete(DeleteBehavior.Restrict);
+            builder.Entity<Offer>().HasOne(o => o.Product).WithMany(p => p.Offers).HasForeignKey(o => o.ProductId).OnDelete(DeleteBehavior.Restrict);
+            builder.Entity<Offer>().HasOne(o => o.Order).WithMany(o => o.Offers).HasForeignKey(o => o.OrderId).OnDelete(DeleteBehavior.Restrict);
+        }
+
+        public void ConfigureProducts(ModelBuilder builder)
+        {
+            builder.Entity<Product>()
+                .Property(p => p.Price)
+                .HasColumnType("decimal(19, 2)");
+
+            builder.Entity<Product>().HasOne(p => p.Farm).WithMany(f => f.Products).HasForeignKey(p => p.FarmId);
+            builder.Entity<Product>().HasOne(p => p.Category).WithMany(c => c.Products).HasForeignKey(p => p.CategoryId);
         }
 
         private void PopulateDb(ModelBuilder builder)

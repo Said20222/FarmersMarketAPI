@@ -9,7 +9,7 @@ namespace FarmersMarketAPI.Models.Entities
         public int FarmId { get; set; }
         public int Quantity { get; set; }
         public decimal Price { get; set; }
-        public required string ProductDescript { get; set; }
+        public string ProductDescript { get; set; }
 
         [JsonIgnore] public Farm Farm { get; set; }
         [JsonIgnore] public Category Category { get; set; }
