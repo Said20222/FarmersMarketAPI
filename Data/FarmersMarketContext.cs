@@ -3,6 +3,7 @@ using FarmersMarketAPI.Models.Entities;
 using FarmersMarketAPI.Models.Auth;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using FarmersMarketAPI.Utilities;
 
 namespace FarmersMarketAPI.Data
 {
@@ -114,7 +115,7 @@ namespace FarmersMarketAPI.Data
                     PhoneNumber = "+111111111111",
                     EmailConfirmed = true,
                     PhoneNumberConfirmed = true,
-                    PasswordHash = "AQAAAAEAACcQAAAAEFvpwHR0kH1sy6DQWpIndLCdmZsahrddpi9XzA5DkTSadoKfzl+amp9ya+lWuMpIWQ==",
+                    PasswordHash = PasswordHelper.HashPassword("12345Admin"),
                     ConcurrencyStamp = "598b1fc2-783d-4c22-82e3-0fcc51bc4f16"
                 }
             );

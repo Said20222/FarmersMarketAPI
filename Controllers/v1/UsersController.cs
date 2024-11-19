@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using FarmersMarketAPI.Models.Auth;
 using FarmersMarketAPI.Data;
+using FarmersMarketAPI.Utilities;
 
 namespace FarmersMarketAPI.Controllers.v1
 {
@@ -64,7 +65,7 @@ namespace FarmersMarketAPI.Controllers.v1
             if (string.IsNullOrWhiteSpace(user.PasswordHash))
                 user.PasswordHash = user_db?.PasswordHash;
             else
-                user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(user.PasswordHash);
+                user.PasswordHash = PasswordHelper.HashPassword(user.PasswordHash);
 
             _context.Entry(user).State = EntityState.Modified;
 
@@ -98,7 +99,7 @@ namespace FarmersMarketAPI.Controllers.v1
             if (_context.Users.Select(u => u.Email).ToList().Contains(user.Email))
                 return Problem("The user with the same Email address already exists");
             
-            user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(user.PasswordHash);
+            user.PasswordHash = PasswordHelper.HashPassword(user.PasswordHash);
 
             _context.Users.Add(user);
             await _context.SaveChangesAsync();

@@ -11,14 +11,9 @@ namespace FarmersMarketAPI.Controllers.v1
     [Route("api/v1/[controller]")]
     [ApiController]
     [EnableCors]
-    public class ProductsController : ControllerBase
+    public class ProductsController(FarmersMarketContext context) : ControllerBase
     {
-        private readonly FarmersMarketContext _context;
-
-        public ProductsController(FarmersMarketContext context)
-        {
-            _context = context;
-        }
+        private readonly FarmersMarketContext _context = context;
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Product>>> GetProducts()
@@ -79,7 +74,6 @@ namespace FarmersMarketAPI.Controllers.v1
 
         [HttpPost]
         [Authorize(Roles = $"{UserRoles.Farmer},{UserRoles.Admin}")]
-
         public async Task<ActionResult<Product>> PostProduct(Product product)
         {
             if (_context.Products == null)

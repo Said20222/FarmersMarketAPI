@@ -12,7 +12,7 @@ namespace FarmersMarketAPI.Models.Entities
         public PaymentMethod PaymentMethod{ get; set;}
         public DateOnly DeliverytDate { get; set;}
 
-        [JsonIgnore] public User Buyer  { get; set;}
-        [JsonIgnore] public List<Offer> Offers { get; set;}
+        [JsonIgnore] public User? Buyer  { get; set;}
+        [JsonIgnore] public List<Offer>? Offers { get; set;}
     }
 }

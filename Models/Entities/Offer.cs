@@ -15,10 +15,10 @@ namespace FarmersMarketAPI.Models.Entities
         public int OfferQuantity { get; set; }
         public OfferStatus OfferStatus{ get; set; }
 
-        [JsonIgnore] public MarketOrder Order{ get; set; }
-        [JsonIgnore] public Product Product{ get; set; }
-        [JsonIgnore] public User CreatedBy{ get; set; }
-        [JsonIgnore] public User OfferedTo{ get; set; }
+        [JsonIgnore] public MarketOrder? Order{ get; set; }
+        [JsonIgnore] public Product? Product{ get; set; }
+        [JsonIgnore] public User? CreatedBy{ get; set; }
+        [JsonIgnore] public User? OfferedTo{ get; set; }
 
     }
 }

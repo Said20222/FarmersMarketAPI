@@ -11,8 +11,8 @@ namespace FarmersMarketAPI.Models.Entities
         public Guid FarmerId { get; set; }
         public string Location { get; set; }
         public FarmSize FarmSize{ get; set; }
-        [JsonIgnore] public User Farmer { get; set; }
-        [JsonIgnore] public List<Product> Products{ get; set; }
+        [JsonIgnore] public User? Farmer { get; set; }
+        [JsonIgnore] public List<Product>? Products{ get; set; }
 
     }
 }

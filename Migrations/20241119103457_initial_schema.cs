@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace FarmersMarketAPI.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreation : Migration
+    public partial class initial_schema : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -302,7 +302,7 @@ namespace FarmersMarketAPI.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
                 columns: new[] { "Id", "AccessFailedCount", "BirthDate", "ConcurrencyStamp", "Email", "EmailConfirmed", "FirstName", "LastName", "LockoutEnabled", "LockoutEnd", "MiddleName", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "PreferredDeliveryMethod", "PreferredPaymentMethod", "ProfileImgPath", "SecurityStamp", "TwoFactorEnabled", "UserName" },
-                values: new object[] { new Guid("8e445865-a24d-4543-a6c6-9443d048cdb9"), 0, null, "598b1fc2-783d-4c22-82e3-0fcc51bc4f16", "admin@mail.com", true, "Admin", "Admin", false, null, "Admin", "ADMIN@MAIL.COM", "ADMIN", "AQAAAAEAACcQAAAAEFvpwHR0kH1sy6DQWpIndLCdmZsahrddpi9XzA5DkTSadoKfzl+amp9ya+lWuMpIWQ==", "+111111111111", true, null, null, null, null, false, "admin" });
+                values: new object[] { new Guid("8e445865-a24d-4543-a6c6-9443d048cdb9"), 0, null, "598b1fc2-783d-4c22-82e3-0fcc51bc4f16", "admin@mail.com", true, "Admin", "Admin", false, null, "Admin", "ADMIN@MAIL.COM", "ADMIN", "AQAAAAIAAAPoAAAAECvrmBYE7QwXwNojYE+9aGv3dclf1sPttR38jzkdPEm3kj5gTorW6F7XIVIQRunAWg==", "+111111111111", true, null, null, null, null, false, "admin" });
 
             migrationBuilder.InsertData(
                 table: "AspNetUserRoles",

@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FarmersMarketAPI.Migrations
 {
     [DbContext(typeof(FarmersMarketContext))]
-    [Migration("20241107094817_InitialCreation")]
-    partial class InitialCreation
+    [Migration("20241119103457_initial_schema")]
+    partial class initial_schema
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -125,7 +125,7 @@ namespace FarmersMarketAPI.Migrations
                             MiddleName = "Admin",
                             NormalizedEmail = "ADMIN@MAIL.COM",
                             NormalizedUserName = "ADMIN",
-                            PasswordHash = "AQAAAAEAACcQAAAAEFvpwHR0kH1sy6DQWpIndLCdmZsahrddpi9XzA5DkTSadoKfzl+amp9ya+lWuMpIWQ==",
+                            PasswordHash = "AQAAAAIAAAPoAAAAECvrmBYE7QwXwNojYE+9aGv3dclf1sPttR38jzkdPEm3kj5gTorW6F7XIVIQRunAWg==",
                             PhoneNumber = "+111111111111",
                             PhoneNumberConfirmed = true,
                             TwoFactorEnabled = false,
