@@ -1,0 +1,4 @@
+{
+    "appService.defaultWebAppToDeploy": "/subscriptions/15e43c66-b780-4cf2-a91b-7f2aeba78ce6/resourceGroups/FarmersMarketGroup/providers/Microsoft.Web/sites/FarmersMarketAPI",
+    "appService.deploySubpath": "bin/Publish"
+}
