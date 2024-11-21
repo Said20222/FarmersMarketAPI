@@ -4,7 +4,8 @@ namespace FarmersMarketAPI.Models.Entities
 {
     public class Product
     {
-        public int ProductId { get; set; }
+        public int Id { get; set; }
+        public required string ProductName { get; set; }
         public int CategoryId { get; set; }
         public int FarmId { get; set; }
         public int Quantity { get; set; }

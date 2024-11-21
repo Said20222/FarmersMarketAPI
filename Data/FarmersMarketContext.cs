@@ -39,14 +39,14 @@ namespace FarmersMarketAPI.Data
                 .Property(f => f.FarmSize)
                 .HasConversion<string>();
 
-            builder.Entity<Farm>().HasOne(f => f.Farmer).WithMany(f => f.Farms).HasForeignKey(f => f.FarmerId);
+            builder.Entity<Farm>().HasOne(f => f.Farmer).WithMany(f => f.Farms).HasForeignKey(f => f.FarmerId).OnDelete(DeleteBehavior.Cascade);
         }
 
         public void ConfigureOrders(ModelBuilder builder) 
         {
 
             builder.Entity<MarketOrder>()
-            .HasKey(f => f.OrderId);
+            .HasKey(f => f.Id);
 
             builder.Entity<MarketOrder>()
             .Property(mo => mo.DeliveryMethod)
@@ -55,6 +55,12 @@ namespace FarmersMarketAPI.Data
             builder.Entity<MarketOrder>()
             .Property(mo => mo.PaymentMethod)
             .HasConversion<string>();
+
+            builder.Entity<MarketOrder>()
+                .Property(o => o.OrderStatus)
+                .HasConversion<string>();
+
+            builder.Entity<MarketOrder>().HasOne(o => o.Buyer).WithMany(o => o.Orders).HasForeignKey(o => o.BuyerId).OnDelete(DeleteBehavior.Restrict);
         }
 
         public void ConfigureOffers(ModelBuilder builder) 
@@ -80,8 +86,8 @@ namespace FarmersMarketAPI.Data
                 .Property(p => p.Price)
                 .HasColumnType("decimal(19, 2)");
 
-            builder.Entity<Product>().HasOne(p => p.Farm).WithMany(f => f.Products).HasForeignKey(p => p.FarmId);
-            builder.Entity<Product>().HasOne(p => p.Category).WithMany(c => c.Products).HasForeignKey(p => p.CategoryId);
+            builder.Entity<Product>().HasOne(p => p.Farm).WithMany(f => f.Products).HasForeignKey(p => p.FarmId).OnDelete(DeleteBehavior.Cascade);
+            builder.Entity<Product>().HasOne(p => p.Category).WithMany(c => c.Products).HasForeignKey(p => p.CategoryId).OnDelete(DeleteBehavior.Restrict);
         }
 
         private void PopulateDb(ModelBuilder builder)

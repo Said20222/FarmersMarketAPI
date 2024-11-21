@@ -27,6 +27,11 @@ namespace FarmersMarketAPI.Controllers.v1
             {
                 return NotFound();
             }
+
+            var count = await _context.Categories.CountAsync();
+            Response.Headers.Append("Access-Control-Expose-Headers", "Content-Range");
+            Response.Headers.Append("Content-Range", $"X-Total-Count: 1 - {count} / {count}");
+
             return await _context.Categories.ToListAsync();
         }
 
@@ -52,7 +57,7 @@ namespace FarmersMarketAPI.Controllers.v1
         [Authorize(Roles = UserRoles.Admin)]
         public async Task<IActionResult> PutCategory(int id, Category category)
         {
-            if (id != category.CategoryId)
+            if (id != category.Id)
             {
                 return BadRequest();
             }
@@ -90,7 +95,7 @@ namespace FarmersMarketAPI.Controllers.v1
             _context.Categories.Add(category);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetCategory", new { id = category.CategoryId }, category);
+            return CreatedAtAction("GetCategory", new { id = category.Id }, category);
         }
 
         [HttpDelete("{id}")]
@@ -115,7 +120,7 @@ namespace FarmersMarketAPI.Controllers.v1
 
         private bool CategoryExists(int id)
         {
-            return (_context.Categories?.Any(e => e.CategoryId == id)).GetValueOrDefault();
+            return (_context.Categories?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }

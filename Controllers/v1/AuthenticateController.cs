@@ -7,6 +7,7 @@ using FarmersMarketAPI.Models.Auth;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using FarmersMarketAPI.Models.Entities;
 
 namespace FarmersMarketAPI.Controllers.v1
 {
@@ -125,7 +126,7 @@ namespace FarmersMarketAPI.Controllers.v1
 
         [HttpPost]
         [Route("register-farmer")]
-        public async Task<IActionResult> RegisterFarmer([FromBody] RegisterModel model)
+        public async Task<IActionResult> RegisterFarmer([FromBody] FarmerRegisterModel model)
         {
             var userExists = await _userManager.FindByNameAsync(model.Username);
             if (userExists != null)
@@ -136,8 +137,21 @@ namespace FarmersMarketAPI.Controllers.v1
             {
                 Email = model.Email,
                 SecurityStamp = Guid.NewGuid().ToString(),
-                UserName = model.Username
+                UserName = model.Username,
+                FirstName = model.FirstName,
+                MiddleName = model.MiddleName, 
+                LastName = model.LastName, 
+                BirthDate = model.BirthDate,
+                PhoneNumber = model.PhoneNumber, 
+                ProfileImgPath = model.ProfileImgPath
             };
+            Farm farm = new() {
+                FarmName = model.FarmName,
+                Location = model.Location,
+                FarmSize = model.FarmSize,
+            };
+            user.Farms?.Add(farm);
+
             var result = await _userManager.CreateAsync(user, model.Password);
             if (!result.Succeeded)
                 return StatusCode(StatusCodes.Status500InternalServerError,
@@ -163,7 +177,7 @@ namespace FarmersMarketAPI.Controllers.v1
 
         [HttpPost]
         [Route("register-buyer")]
-        public async Task<IActionResult> RegisterBuyer([FromBody] RegisterModel model)
+        public async Task<IActionResult> RegisterBuyer([FromBody] BuyerRegisterModel model)
         {
             var userExists = await _userManager.FindByNameAsync(model.Username);
             if (userExists != null)
@@ -174,7 +188,15 @@ namespace FarmersMarketAPI.Controllers.v1
             {
                 Email = model.Email,
                 SecurityStamp = Guid.NewGuid().ToString(),
-                UserName = model.Username
+                UserName = model.Username,
+                FirstName = model.FirstName,
+                MiddleName = model.MiddleName, 
+                LastName = model.LastName, 
+                BirthDate = model.BirthDate,
+                PhoneNumber = model.PhoneNumber,
+                PreferredDeliveryMethod = model.PreferredDeliveryMethod,
+                PreferredPaymentMethod = model.PreferredPaymentMethod, 
+                DeliveryAddress = model.DeliveryAddress
             };
             var result = await _userManager.CreateAsync(user, model.Password);
             if (!result.Succeeded)

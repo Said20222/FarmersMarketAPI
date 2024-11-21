@@ -27,6 +27,11 @@ namespace FarmersMarketAPI.Controllers.v1
             {
                 return NotFound();
             }
+
+            var count = await _context.Offers.CountAsync();
+            Response.Headers.Append("Access-Control-Expose-Headers", "Content-Range");
+            Response.Headers.Append("Content-Range", $"X-Total-Count: 1 - {count} / {count}");
+
             return await _context.Offers.ToListAsync();
         }
 
@@ -52,7 +57,7 @@ namespace FarmersMarketAPI.Controllers.v1
         [Authorize(Roles = UserRoles.Admin)]
         public async Task<IActionResult> PutOffer(int id, Offer Offer)
         {
-            if (id != Offer.OfferId)
+            if (id != Offer.Id)
             {
                 return BadRequest();
             }
@@ -90,7 +95,7 @@ namespace FarmersMarketAPI.Controllers.v1
             _context.Offers.Add(Offer);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetOffer", new { id = Offer.OfferId }, Offer);
+            return CreatedAtAction("GetOffer", new { id = Offer.Id }, Offer);
         }
 
         [HttpDelete("{id}")]
@@ -115,7 +120,7 @@ namespace FarmersMarketAPI.Controllers.v1
 
         private bool OfferExists(int id)
         {
-            return (_context.Offers?.Any(e => e.OfferId == id)).GetValueOrDefault();
+            return (_context.Offers?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }

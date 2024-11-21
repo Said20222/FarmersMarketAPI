@@ -6,7 +6,7 @@ namespace FarmersMarketAPI.Models.Entities
     public enum OfferStatus {Waiting, Accepted, Rejected}
     public class Offer
     {
-        public int OfferId { get; set; }
+        public int Id { get; set; }
         public int ProductId { get; set; }
         public Guid CreatedById { get; set; }
         public Guid OfferedToId { get; set; }

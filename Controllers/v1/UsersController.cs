@@ -11,14 +11,9 @@ namespace FarmersMarketAPI.Controllers.v1
     [Route("api/v1/[controller]")]
     [ApiController]
     [EnableCors]
-    public class UsersController : ControllerBase
+    public class UsersController(FarmersMarketContext context) : ControllerBase
     {
-        private readonly FarmersMarketContext _context;
-
-        public UsersController(FarmersMarketContext context)
-        {
-            _context = context;
-        }
+        private readonly FarmersMarketContext _context = context;
 
         [HttpGet]
         [Authorize(Roles = UserRoles.Admin)]
@@ -28,6 +23,10 @@ namespace FarmersMarketAPI.Controllers.v1
             {
                 return NotFound();
             }
+            var count = await _context.Users.CountAsync();
+            Response.Headers.Append("Access-Control-Expose-Headers", "Content-Range");
+            Response.Headers.Append("Content-Range", $"X-Total-Count: 1 - {count} / {count}");
+
             return await _context.Users.ToListAsync();
         }
 
@@ -86,25 +85,6 @@ namespace FarmersMarketAPI.Controllers.v1
             }
 
             return NoContent();
-        }
-
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
-        [Authorize(Roles = UserRoles.Admin)]
-        public async Task<ActionResult<User>> PostUser(User user)
-        {
-            if (_context.Users == null)
-                return Problem("Entity set 'ApplicationDbContext.Users'  is null.");
-
-            if (_context.Users.Select(u => u.Email).ToList().Contains(user.Email))
-                return Problem("The user with the same Email address already exists");
-            
-            user.PasswordHash = PasswordHelper.HashPassword(user.PasswordHash);
-
-            _context.Users.Add(user);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetUser", new { id = user.Id }, user);
         }
 
         [HttpDelete("{id}")]

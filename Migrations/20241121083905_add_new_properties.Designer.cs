@@ -4,6 +4,7 @@ using FarmersMarketAPI.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FarmersMarketAPI.Migrations
 {
     [DbContext(typeof(FarmersMarketContext))]
-    partial class FarmersMarketContextModelSnapshot : ModelSnapshot
+    [Migration("20241121083905_add_new_properties")]
+    partial class add_new_properties
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -125,7 +128,7 @@ namespace FarmersMarketAPI.Migrations
                             MiddleName = "Admin",
                             NormalizedEmail = "ADMIN@MAIL.COM",
                             NormalizedUserName = "ADMIN",
-                            PasswordHash = "AQAAAAIAAAPoAAAAEKrpTBiDXAXbLQkH9mu/Wmfotwb1MakCshqiAiu/SGBQwcWpQVdfkyDRjaEmuVV/cg==",
+                            PasswordHash = "AQAAAAIAAAPoAAAAELvFzid7lqcLUoBvTcdIZGW16Nww5mPWyMVHoBNg/YOoNKObKVXjUMJgdG87rz7SpA==",
                             PhoneNumber = "+111111111111",
                             PhoneNumberConfirmed = true,
                             TwoFactorEnabled = false,
@@ -135,11 +138,11 @@ namespace FarmersMarketAPI.Migrations
 
             modelBuilder.Entity("FarmersMarketAPI.Models.Entities.Category", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("CategoryId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CategoryId"));
 
                     b.Property<string>("CategoryDescription")
                         .IsRequired()
@@ -152,18 +155,18 @@ namespace FarmersMarketAPI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Id");
+                    b.HasKey("CategoryId");
 
                     b.ToTable("Categories");
                 });
 
             modelBuilder.Entity("FarmersMarketAPI.Models.Entities.Farm", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("FarmId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("FarmId"));
 
                     b.Property<string>("FarmDescription")
                         .HasColumnType("nvarchar(max)");
@@ -183,7 +186,7 @@ namespace FarmersMarketAPI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Id");
+                    b.HasKey("FarmId");
 
                     b.HasIndex("FarmerId");
 
@@ -192,11 +195,11 @@ namespace FarmersMarketAPI.Migrations
 
             modelBuilder.Entity("FarmersMarketAPI.Models.Entities.MarketOrder", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("OrderId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("OrderId"));
 
                     b.Property<Guid>("BuyerId")
                         .HasColumnType("uniqueidentifier");
@@ -208,15 +211,11 @@ namespace FarmersMarketAPI.Migrations
                     b.Property<DateOnly>("DeliverytDate")
                         .HasColumnType("date");
 
-                    b.Property<string>("OrderStatus")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("PaymentMethod")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Id");
+                    b.HasKey("OrderId");
 
                     b.HasIndex("BuyerId");
 
@@ -225,11 +224,11 @@ namespace FarmersMarketAPI.Migrations
 
             modelBuilder.Entity("FarmersMarketAPI.Models.Entities.Offer", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("OfferId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("OfferId"));
 
                     b.Property<Guid>("CreatedById")
                         .HasColumnType("uniqueidentifier");
@@ -253,7 +252,7 @@ namespace FarmersMarketAPI.Migrations
                     b.Property<int>("ProductId")
                         .HasColumnType("int");
 
-                    b.HasKey("Id");
+                    b.HasKey("OfferId");
 
                     b.HasIndex("CreatedById");
 
@@ -268,11 +267,11 @@ namespace FarmersMarketAPI.Migrations
 
             modelBuilder.Entity("FarmersMarketAPI.Models.Entities.Product", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("ProductId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ProductId"));
 
                     b.Property<int>("CategoryId")
                         .HasColumnType("int");
@@ -286,14 +285,10 @@ namespace FarmersMarketAPI.Migrations
                     b.Property<string>("ProductDescript")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ProductName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
-                    b.HasKey("Id");
+                    b.HasKey("ProductId");
 
                     b.HasIndex("CategoryId");
 
