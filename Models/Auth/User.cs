@@ -15,6 +15,7 @@ namespace FarmersMarketAPI.Models.Auth
         public PaymentMethod? PreferredPaymentMethod { get; set; }
         public DeliveryMethod? PreferredDeliveryMethod { get; set; }
         public string? DeliveryAddress { get; set; }
+        public bool? FarmerApproved { get; set; }
         [JsonIgnore] public List<Farm>? Farms { get; set; }
         [JsonIgnore] public List<MarketOrder>? Orders { get; set; }
         [JsonIgnore] public List<Offer>? CreatedOffers { get; set; }

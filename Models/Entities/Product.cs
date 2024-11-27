@@ -15,6 +15,14 @@ namespace FarmersMarketAPI.Models.Entities
         [JsonIgnore] public Farm? Farm { get; set; }
         [JsonIgnore] public Category? Category { get; set; }
         [JsonIgnore] public List<Offer>? Offers{ get; set; }
+        [JsonIgnore] public List<ProductImage>? ProductImages { get; set; }
 
+    }
+
+    public class ProductImage {
+        public int ProductImageId { get; set; }
+        public int ProductId { get; set; }
+        public required string ImagePath { get; set; }[JsonIgnore]
+        public required virtual Product Product { get; set; }
     }
 }
