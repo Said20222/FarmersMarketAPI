@@ -5,15 +5,17 @@ using Microsoft.EntityFrameworkCore;
 using FarmersMarketAPI.Models.Auth;
 using FarmersMarketAPI.Data;
 using FarmersMarketAPI.Utilities;
+using Microsoft.AspNetCore.Identity;
 
 namespace FarmersMarketAPI.Controllers.v1
 {
     [Route("api/v1/[controller]")]
     [ApiController]
     [EnableCors]
-    public class UsersController(FarmersMarketContext context) : ControllerBase
+    public class UsersController(FarmersMarketContext context, UserManager<User> userManager) : ControllerBase
     {
         private readonly FarmersMarketContext _context = context;
+        private readonly UserManager<User> _userManager = userManager;
 
         [HttpGet]
         [Authorize(Roles = UserRoles.Admin)]
@@ -48,6 +50,35 @@ namespace FarmersMarketAPI.Controllers.v1
             return user;
         }
 
+        [HttpGet("farmers")]
+        [Authorize(Roles = UserRoles.Admin)]
+        public async Task<ActionResult<IEnumerable<User>>> GetFarmers()
+        {
+            if (_context.Users == null)
+            {
+                return NotFound();
+            }
+
+            var users = await _context.Users.
+                            ToListAsync();
+
+            List<User> farmers = [];
+            foreach (var u in users)
+            {
+                if (await _userManager.IsInRoleAsync(u, UserRoles.Farmer)) {
+                    farmers.Add(u); 
+                }
+            }
+
+            if (farmers.Count == 0)
+            {
+                return NotFound("No farmers found.");
+            }
+
+            return farmers;
+            }
+
+
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
         [Authorize(Roles = UserRoles.Admin)]
@@ -67,6 +98,7 @@ namespace FarmersMarketAPI.Controllers.v1
                 user.PasswordHash = PasswordHelper.HashPassword(user.PasswordHash);
 
             _context.Entry(user).State = EntityState.Modified;
+
 
             try
             {
