@@ -31,13 +31,13 @@ namespace FarmersMarketAPI.Controllers.v1
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<MarketOrder>> GetMarketOrder(string id)
+        public async Task<ActionResult<MarketOrder>> GetMarketOrder(int id)
         {
             if (_context.MarketOrders == null)
             {
                 return NotFound();
             }
-            var MarketOrder = await _context.MarketOrders.FindAsync(new Guid(id));
+            var MarketOrder = await _context.MarketOrders.FindAsync(id);
 
             if (MarketOrder == null)
             {
@@ -95,13 +95,13 @@ namespace FarmersMarketAPI.Controllers.v1
 
         [HttpDelete("{id}")]
         [Authorize(Roles = $"{UserRoles.Farmer},{UserRoles.Admin}")]
-        public async Task<IActionResult> DeleteMarketOrder(string id)
+        public async Task<IActionResult> DeleteMarketOrder(int id)
         {
             if (_context.MarketOrders == null)
             {
                 return NotFound();
             }
-            var MarketOrder = await _context.MarketOrders.FindAsync(new Guid(id));
+            var MarketOrder = await _context.MarketOrders.FindAsync(id);
             if (MarketOrder == null)
             {
                 return NotFound();
