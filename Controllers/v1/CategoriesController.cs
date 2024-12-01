@@ -36,13 +36,13 @@ namespace FarmersMarketAPI.Controllers.v1
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Category>> GetCategory(string id)
+        public async Task<ActionResult<Category>> GetCategory(int id)
         {
             if (_context.Categories == null)
             {
                 return NotFound();
             }
-            var category = await _context.Categories.FindAsync(new Guid(id));
+            var category = await _context.Categories.FindAsync(id);
 
             if (category == null)
             {
@@ -106,7 +106,7 @@ namespace FarmersMarketAPI.Controllers.v1
             {
                 return NotFound();
             }
-            var category = await _context.Categories.FindAsync(new Guid(id));
+            var category = await _context.Categories.FindAsync(id);
             if (category == null)
             {
                 return NotFound();
