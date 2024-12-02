@@ -92,7 +92,7 @@ namespace FarmersMarketAPI.Controllers.v1
 
             var user_db = _context.Users?.AsNoTracking().Where(x => x.Id == user.Id)?.FirstOrDefault();
 
-            if (string.IsNullOrWhiteSpace(user.PasswordHash))
+            if (string.IsNullOrWhiteSpace(user.PasswordHash) || user.PasswordHash == user_db?.PasswordHash)
                 user.PasswordHash = user_db?.PasswordHash;
             else
                 user.PasswordHash = PasswordHelper.HashPassword(user.PasswordHash);

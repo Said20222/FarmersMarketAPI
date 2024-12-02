@@ -8,6 +8,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using FarmersMarketAPI.Models.Entities;
+using FarmersMarketAPI.Data;
 
 namespace FarmersMarketAPI.Controllers.v1
 {
@@ -17,8 +18,10 @@ namespace FarmersMarketAPI.Controllers.v1
     public class AuthenticateController(
         UserManager<User> userManager,
         RoleManager<IdentityRole<Guid>> roleManager,
+        FarmersMarketContext context,
         IConfiguration configuration) : ControllerBase
     {
+        private readonly FarmersMarketContext _dbContext = context;
         private readonly UserManager<User> _userManager = userManager;
         private readonly RoleManager<IdentityRole<Guid>> _roleManager = roleManager;
         private readonly IConfiguration _configuration = configuration;
@@ -145,12 +148,6 @@ namespace FarmersMarketAPI.Controllers.v1
                 PhoneNumber = model.PhoneNumber, 
                 ProfileImgPath = model.ProfileImgPath
             };
-            Farm farm = new() {
-                FarmName = model.FarmName,
-                Location = model.Location,
-                FarmSize = model.FarmSize,
-            };
-            user.Farms?.Add(farm);
 
             var result = await _userManager.CreateAsync(user, model.Password);
             if (!result.Succeeded)
@@ -160,6 +157,16 @@ namespace FarmersMarketAPI.Controllers.v1
                         Status = "Error",
                         Message = "User creation failed! Please check user details and try again."
                     });
+
+            Farm farm = new() {
+                FarmName = model.FarmName,
+                Location = model.Location,
+                FarmSize = model.FarmSize,
+                FarmerId = user.Id
+            };
+            
+            _dbContext.Farms.Add(farm); // Explicitly add the Farm
+            await _dbContext.SaveChangesAsync();
 
             if (!await _roleManager.RoleExistsAsync(UserRoles.Admin))
                 await _roleManager.CreateAsync(new IdentityRole<Guid>(UserRoles.Admin));
